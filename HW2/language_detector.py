@@ -49,30 +49,35 @@ def create_model(path):
 
     # FIXME After calculating the counts, calculate the smoothed log probabilities
     distinct_unigrams = len(unigrams) # should be 26 but who knows?
-    unigrams_count = 0
-    distinct_bigrams = 0
-    smoothed_bigrams_probs = {}
-    for o_key in unigrams.keys():
-        unigrams_count += unigrams[o_key]
-        for i_key in unigrams.keys():
-            distinct_bigrams += bigrams[o_key][i_key]
-            smoothed_bigrams_probs['{}{}'.format(i_key, o_key)] = (bigrams[o_key][i_key] + 1)/ (unigrams[o_key] + distinct_unigrams)
+    unigrams_count = sum(unigrams.values())
+    smoothed_bigrams_probs = collections.defaultdict(lambda: collections.defaultdict(int))
+
+    # for f_key in unigrams.keys():
+    #     unigrams_count += unigrams[f_key]
+        # for s_key in unigrams.keys(): 
+        #     smoothed_bigrams_probs[f_key] = (bigrams[f_key][s_key] + 1)/ (unigrams[f_key] + distinct_unigrams) # add-one smoothing
+   
+
+    # transform the counts to probabilities
+    for key in bigrams:
+        key_occur = (sum(bigrams[key].values()))
+        # print(' f_key {}'.format(key))
+        # print(' f_key value {}'.format(bigrams[key].values()))
+        # print(' total_count {}'.format(total_count))
+        for value in bigrams[key]:
+            # bigrams[key][value] /= total_count
+            smoothed_bigrams_probs[key][value] = (bigrams[key][value] + 1) /(key_occur + distinct_unigrams)
 
 
 
 
     # return the actual model: bigram (smoothed log) probabilities and unigram counts (the latter to smooth
     # unseen bigrams in predict(...)
-
-    print(path)
-    print(unigrams['a'])
-    print(unigrams['w'])
-    print(bigrams['a']['l'])
-    print(bigrams['a']['r'])
     print('unigram count: {}'.format(unigrams_count)) 
-
-    print('distinct_bigrams: {}'.format(distinct_bigrams)) 
-    print(smoothed_bigrams_probs)
+  
+    print(bigrams['a'])
+    print(smoothed_bigrams_probs['a'])
+    # print(smoothed_bigrams_probs['a'])
 
 
     return None
