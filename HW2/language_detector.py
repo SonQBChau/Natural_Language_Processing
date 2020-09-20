@@ -2,6 +2,7 @@ import argparse
 import os, re
 import random
 import collections
+import math
 
 
 def preprocess(line):
@@ -38,7 +39,6 @@ def create_model(path):
             continue
         for token in tokens:
             # FIXME Update the counts for unigrams and bigrams
-
             for i in range(1,len(token)-1): # I can't figure out why we need $, I guess to avoid the last char error?!?
                 curr_char = token[i]
                 next_char = token[i+1]
@@ -52,20 +52,10 @@ def create_model(path):
     unigrams_count = sum(unigrams.values())
     smoothed_bigrams_probs = collections.defaultdict(lambda: collections.defaultdict(int))
 
-    # for f_key in unigrams.keys():
-    #     unigrams_count += unigrams[f_key]
-        # for s_key in unigrams.keys(): 
-        #     smoothed_bigrams_probs[f_key] = (bigrams[f_key][s_key] + 1)/ (unigrams[f_key] + distinct_unigrams) # add-one smoothing
-   
-
-    # transform the counts to probabilities
+    # smoothed log probabilities
     for key in bigrams:
         key_occur = (sum(bigrams[key].values()))
-        # print(' f_key {}'.format(key))
-        # print(' f_key value {}'.format(bigrams[key].values()))
-        # print(' total_count {}'.format(total_count))
         for value in bigrams[key]:
-            # bigrams[key][value] /= total_count
             smoothed_bigrams_probs[key][value] = (bigrams[key][value] + 1) /(key_occur + distinct_unigrams)
 
 
@@ -73,14 +63,13 @@ def create_model(path):
 
     # return the actual model: bigram (smoothed log) probabilities and unigram counts (the latter to smooth
     # unseen bigrams in predict(...)
-    print('unigram count: {}'.format(unigrams_count)) 
-  
-    print(bigrams['a'])
-    print(smoothed_bigrams_probs['a'])
-    # print(smoothed_bigrams_probs['a'])
+    # print('unigram count: {}'.format(unigrams_count)) 
+    # print(bigrams['a'])
 
 
-    return None
+
+
+    return [smoothed_bigrams_probs, unigrams_count]
 
 
 def predict(file, model_en, model_es):
@@ -90,6 +79,24 @@ def predict(file, model_en, model_es):
     # FIXME: Predict whichever language gives you the highest (smoothed log) probability
     # - remember to do exactly the same preprocessing you did when creating the model (that's what it is a method)
     # - you may want to use an additional method to calculate the probablity of a text given a model (and call it twice)
+    f = open(file, 'r',  encoding="utf8")
+    total_prob = 0
+    for l in f.readlines():
+        tokens = preprocess(l)
+        if len(tokens) == 0:
+            continue
+        for token in tokens:
+            for i in range(1,len(token)-1): 
+                curr_char = token[i]
+                next_char = token[i+1]
+                curr_prob = model_en[0][curr_char][next_char]
+                if (curr_prob == 0):
+                    curr_prob = 1/ (model_en[1]+26)
+                # print('{} {} {}'.format(curr_char,next_char,curr_prob))
+                total_prob += math.log(curr_prob)
+    print(total_prob)
+                
+        
 
     # prediction should be either 'English' or 'Spanish'
     return prediction
