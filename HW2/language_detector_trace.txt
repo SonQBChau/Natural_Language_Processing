@@ -1,0 +1,124 @@
+============================================================
+Count of 'a' in ../data/train/en/all_en.txt:     225656 (from unigrams dictionary, before calculating the smoothed log probabilities)
+
+Count of 'al' in ../data/train/en/all_en.txt:      13288 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ar' in ../data/train/en/all_en.txt:      24552 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'an' in ../data/train/en/all_en.txt:      48934 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'at' in ../data/train/en/all_en.txt:      28806 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ay' in ../data/train/en/all_en.txt:       5501 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'aw' in ../data/train/en/all_en.txt:       2899 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'au' in ../data/train/en/all_en.txt:       2177 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'as' in ../data/train/en/all_en.txt:      21135 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ag' in ../data/train/en/all_en.txt:       5144 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ai' in ../data/train/en/all_en.txt:       8518 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ap' in ../data/train/en/all_en.txt:       6581 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ac' in ../data/train/en/all_en.txt:       9054 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'a$' in ../data/train/en/all_en.txt:      15247 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ad' in ../data/train/en/all_en.txt:      13339 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ab' in ../data/train/en/all_en.txt:       4235 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'av' in ../data/train/en/all_en.txt:       4835 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'af' in ../data/train/en/all_en.txt:       1907 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ax' in ../data/train/en/all_en.txt:        161 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'am' in ../data/train/en/all_en.txt:       5313 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ak' in ../data/train/en/all_en.txt:       3021 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'az' in ../data/train/en/all_en.txt:        511 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ah' in ../data/train/en/all_en.txt:        297 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'aj' in ../data/train/en/all_en.txt:        101 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'aa' in ../data/train/en/all_en.txt:          8 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ae' in ../data/train/en/all_en.txt:         68 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'aq' in ../data/train/en/all_en.txt:          1 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ao' in ../data/train/en/all_en.txt:         23 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+============================================================
+============================================================
+Count of 'w' in ../data/train/en/all_en.txt:      61989 (from unigrams dictionary, before calculating the smoothed log probabilities)
+
+Count of 'wh' in ../data/train/en/all_en.txt:      10164 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'wi' in ../data/train/en/all_en.txt:       9748 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'wa' in ../data/train/en/all_en.txt:      16373 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ww' in ../data/train/en/all_en.txt:         88 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'wg' in ../data/train/en/all_en.txt:         60 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ws' in ../data/train/en/all_en.txt:        783 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'wn' in ../data/train/en/all_en.txt:       2093 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'wo' in ../data/train/en/all_en.txt:       5862 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'w$' in ../data/train/en/all_en.txt:       7234 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'we' in ../data/train/en/all_en.txt:       7584 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'wf' in ../data/train/en/all_en.txt:         85 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'wk' in ../data/train/en/all_en.txt:         25 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'wl' in ../data/train/en/all_en.txt:        984 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'wu' in ../data/train/en/all_en.txt:        175 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'wr' in ../data/train/en/all_en.txt:        512 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'wt' in ../data/train/en/all_en.txt:         42 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'wc' in ../data/train/en/all_en.txt:         51 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'wd' in ../data/train/en/all_en.txt:         53 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'wb' in ../data/train/en/all_en.txt:         33 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'wy' in ../data/train/en/all_en.txt:         19 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'wp' in ../data/train/en/all_en.txt:         10 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'wm' in ../data/train/en/all_en.txt:         11 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+============================================================
+============================================================
+Count of 'a' in ../data/train/es/all_es.txt:     342031 (from unigrams dictionary, before calculating the smoothed log probabilities)
+
+Count of 'as' in ../data/train/es/all_es.txt:      35001 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'an' in ../data/train/es/all_es.txt:      36351 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'a$' in ../data/train/es/all_es.txt:     118328 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ar' in ../data/train/es/all_es.txt:      33882 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'at' in ../data/train/es/all_es.txt:       5801 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'al' in ../data/train/es/all_es.txt:      25543 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ay' in ../data/train/es/all_es.txt:       2588 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'aw' in ../data/train/es/all_es.txt:         65 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'au' in ../data/train/es/all_es.txt:       2289 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ag' in ../data/train/es/all_es.txt:       3495 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ad' in ../data/train/es/all_es.txt:      21121 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ac' in ../data/train/es/all_es.txt:       9850 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ab' in ../data/train/es/all_es.txt:      18350 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ai' in ../data/train/es/all_es.txt:       1154 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'av' in ../data/train/es/all_es.txt:       2122 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'aj' in ../data/train/es/all_es.txt:       2201 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'am' in ../data/train/es/all_es.txt:      10381 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ap' in ../data/train/es/all_es.txt:       3087 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ah' in ../data/train/es/all_es.txt:        987 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'az' in ../data/train/es/all_es.txt:       2493 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'aa' in ../data/train/es/all_es.txt:       1527 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ao' in ../data/train/es/all_es.txt:       1045 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ae' in ../data/train/es/all_es.txt:        860 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'aq' in ../data/train/es/all_es.txt:       2803 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'af' in ../data/train/es/all_es.txt:        616 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ak' in ../data/train/es/all_es.txt:         42 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ax' in ../data/train/es/all_es.txt:         49 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+============================================================
+============================================================
+Count of 'w' in ../data/train/es/all_es.txt:       1408 (from unigrams dictionary, before calculating the smoothed log probabilities)
+
+Count of 'wh' in ../data/train/es/all_es.txt:        112 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'wi' in ../data/train/es/all_es.txt:        377 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'wa' in ../data/train/es/all_es.txt:         86 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ww' in ../data/train/es/all_es.txt:         68 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'wg' in ../data/train/es/all_es.txt:         25 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'we' in ../data/train/es/all_es.txt:        102 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'w$' in ../data/train/es/all_es.txt:        101 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'wn' in ../data/train/es/all_es.txt:         41 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'wo' in ../data/train/es/all_es.txt:        401 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'wp' in ../data/train/es/all_es.txt:         10 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'ws' in ../data/train/es/all_es.txt:         45 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'wr' in ../data/train/es/all_es.txt:         30 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+Count of 'wb' in ../data/train/es/all_es.txt:         10 (from bigrams  dictionary, before calculating the smoothed log probabilities)
+============================================================
+Prediction for English documents in test:
+pg345.txt	English
+pg1497.txt	English
+pg3526.txt	English
+pg103.txt	English
+pg16.txt	English
+news1.txt	English
+news3.txt	English
+news2.txt	English
+
+Prediction for Spanish documents in test:
+pg15725.txt	Spanish
+pg21906.txt	Spanish
+pg14311.txt	Spanish
+pg25956.txt	Spanish
+news1.txt	Spanish
+news3.txt	Spanish
+news2.txt	Spanish
+pg31465.txt	Spanish

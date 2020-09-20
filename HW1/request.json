@@ -1,0 +1,15 @@
+{
+	"config":
+	{
+		"encoding":"FLAC",
+		"languageCode":"en-US",
+		"audio_channel_count":"2",
+		"enableWordTimeOffsets": true
+
+	},
+
+	"audio":
+	{
+		"uri":"gs://game_audio_sonchau/11_ArizonaCardinalsSanFrancisco49ers2018Oct7Fox.flac"
+	}
+}

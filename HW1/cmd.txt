@@ -1,0 +1,15 @@
+
+curl -s -H "Content-Type: application/json"-H "Authorization: Bearer "$(gcloud auth application-default print-access-token) https://speech.googleapis.com/v1/speech:longrunningrecognize?key={GoogleAPIKey} -d @C:\Users\Son\Downloads\request.json 
+
+491754349393032767
+
+curl -s -H "Content-Type: application/json"-H "Authorization: Bearer "$(gcloud auth application-default print-access-token) https://speech.googleapis.com/v1/operations/491754349393032767?key={GoogleAPIKey} -o myresponse.json
+
+4578481341499933187
+
+curl -s -H "Content-Type: application/json"-H "Authorization: Bearer "$(gcloud auth application-default print-access-token) https://speech.googleapis.com/v1/operations/4578481341499933187?key={GoogleAPIKey} -o myresponse.json
+
+
+1642299340273623039
+
+curl -s -H "Content-Type: application/json"-H "Authorization: Bearer "$(gcloud auth application-default print-access-token) https://speech.googleapis.com/v1/operations/1642299340273623039?key=A{GoogleAPIKey} 
