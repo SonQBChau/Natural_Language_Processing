@@ -39,7 +39,7 @@ def create_model(path):
         for token in tokens:
             # FIXME Update the counts for unigrams and bigrams
 
-            for i in range(1,len(token)-1): # I can't figure out why we need $, I guess it to avoid the last char error
+            for i in range(1,len(token)-1): # I can't figure out why we need $, I guess to avoid the last char error?!?
                 curr_char = token[i]
                 next_char = token[i+1]
                 unigrams[curr_char] += 1
@@ -48,14 +48,33 @@ def create_model(path):
             pass
 
     # FIXME After calculating the counts, calculate the smoothed log probabilities
+    distinct_unigrams = len(unigrams) # should be 26 but who knows?
+    unigrams_count = 0
+    distinct_bigrams = 0
+    smoothed_bigrams_probs = {}
+    for o_key in unigrams.keys():
+        unigrams_count += unigrams[o_key]
+        for i_key in unigrams.keys():
+            distinct_bigrams += bigrams[o_key][i_key]
+            smoothed_bigrams_probs['{}{}'.format(i_key, o_key)] = (bigrams[o_key][i_key] + 1)/ (unigrams[o_key] + distinct_unigrams)
+
+
+
 
     # return the actual model: bigram (smoothed log) probabilities and unigram counts (the latter to smooth
     # unseen bigrams in predict(...)
+
     print(path)
     print(unigrams['a'])
     print(unigrams['w'])
     print(bigrams['a']['l'])
     print(bigrams['a']['r'])
+    print('unigram count: {}'.format(unigrams_count)) 
+
+    print('distinct_bigrams: {}'.format(distinct_bigrams)) 
+    print(smoothed_bigrams_probs)
+
+
     return None
 
 
