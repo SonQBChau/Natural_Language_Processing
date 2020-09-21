@@ -29,6 +29,7 @@ def create_model(path):
     # unigrams will return 0 if the key doesn't exist
     unigrams = collections.defaultdict(int)
     # and then you have to figure out what bigrams will return
+    bigrams = collections.defaultdict(lambda: collections.defaultdict(int))
     trigrams = collections.defaultdict(lambda: collections.defaultdict(int))
 
     f = open(path, 'r',  encoding="utf8")
@@ -39,27 +40,61 @@ def create_model(path):
             continue
         for token in tokens:
             # FIXME Update the counts for unigrams and bigrams
-            for i in range(2,len(token)-2): # I can't figure out why we need $, I guess to avoid the last char error?!?
+            for i in range(2,len(token)-2): 
                 char_1 = token[i]
                 char_2 = token[i+1]
                 char_3 = token[i+2]
                 unigrams[char_1] += 1
+                bigrams[char_1][char_2] += 1
                 trigrams[(char_1,char_2)][char_3] += 1
           
            
 
     # FIXME After calculating the counts, calculate the smoothed log probabilities
     distinct_unigrams = len(unigrams) # should be 26 but who knows?
-    unigrams_count = sum(unigrams.values())
+    unigrams_count = float(sum(unigrams.values()))
     smoothed_trigrams_probs = collections.defaultdict(lambda: collections.defaultdict(int))
 
-    # smoothed log probabilities
-    for char_1_char_2 in trigrams:
-        key_occur = (sum(trigrams[char_1_char_2].values()))
-        for value in trigrams[char_1_char_2]:
-            smoothed_trigrams_probs[char_1_char_2][value] = math.log((trigrams[char_1_char_2][value] + 1) /(key_occur + distinct_unigrams)) #add-one smoothing
+    # raw probabilities of unigram, bigram, trigram
+    unigram_raw_probs = collections.defaultdict(int)
+    for char_1 in unigrams:
+        unigram_raw_probs[char_1] = unigrams[char_1] / unigrams_count
 
-    return {"trigrams":smoothed_trigrams_probs, "unigrams_count": unigrams_count }
+    bigram_raw_probs = collections.defaultdict(lambda: collections.defaultdict(int))
+    for char_1 in bigrams:
+        char_1_occur = float(sum(bigrams[char_1].values()))
+        for char_2 in bigrams[char_1]:
+            bigram_raw_probs[char_1][char_2] = bigrams[char_1][char_2] / char_1_occur
+
+    trigram_raw_probs = collections.defaultdict(lambda: collections.defaultdict(int))
+    trigram_lerp_probs = collections.defaultdict(lambda: collections.defaultdict(int))
+    # lambda1+2+3 = 1, lambda is train on held out corpus
+    lambda1= 0.3
+    lambda2= 0.4
+    lambda3= 0.3
+    for char_1_char_2 in trigrams:
+        char_1_char_2_occur = float(sum(trigrams[char_1_char_2].values()))
+        char_1 = char_1_char_2[0]
+        char_2 = char_1_char_2[1]
+        for char_3 in trigrams[char_1_char_2]:
+            trigram_raw_probs[char_1_char_2][char_3] = trigrams[char_1_char_2][char_3] / char_1_char_2_occur
+            # simple interpolation
+            trigram_lerp_probs[char_1_char_2][char_3] = lambda1 * unigram_raw_probs[char_1]  + lambda2 * bigram_raw_probs[char_1][char_2]  + lambda3 * trigram_raw_probs[char_1_char_2][char_3]
+    
+    # print(unigram_raw_probs)
+    # print(bigram_raw_probs)
+    # print(trigram_raw_probs)
+
+    # smoothed log probabilities
+    # for char_1_char_2 in trigrams:
+    #     key_occur = (sum(trigrams[char_1_char_2].values()))
+    #     for char_3 in trigrams[char_1_char_2]:
+    #         # smoothed_trigrams_probs[char_1_char_2][value] = math.log((trigrams[char_1_char_2][value] + 1) /(key_occur + distinct_unigrams)) #add-one smoothing
+    #         lerp_trigrams_probs[char_1_char_2][char_3] = lambda1 * unigrams[char_1] + lambda2 * bigrams[char_1][char_2] + lambda3 * trigrams[(char_1,char_2)[char_3]] # simple interpolation
+
+    # return {"trigrams":smoothed_trigrams_probs, "unigrams_count": unigrams_count }
+
+    return trigram_lerp_probs
 
 
 def predict(file, model_en, model_es):
@@ -81,12 +116,8 @@ def predict(file, model_en, model_es):
                 char_1 = token[i]
                 char_2 = token[i+1]
                 char_3 = token[i+2]
-                en_curr_prob = model_en['trigrams'][char_1,char_2][char_3]
-                es_curr_prob = model_es['trigrams'][char_1,char_2][char_3]
-                if (en_curr_prob == 0): # if probs is 0, use smoothing
-                    en_curr_prob = math.log(1/ (model_en['unigrams_count']+26))
-                if (es_curr_prob == 0): # if probs is 0, use smoothing
-                    es_curr_prob = math.log(1/ (model_es['unigrams_count']+26))
+                en_curr_prob = model_en[char_1,char_2][char_3]
+                es_curr_prob = model_es[char_1,char_2][char_3]
                 en_total_prob += en_curr_prob
                 es_total_prob += es_curr_prob
     print('{} en model: {} es model: {}'.format(file,en_total_prob,es_total_prob))
