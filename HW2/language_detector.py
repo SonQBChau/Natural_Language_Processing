@@ -56,7 +56,7 @@ def create_model(path):
     for key in bigrams:
         key_occur = (sum(bigrams[key].values()))
         for value in bigrams[key]:
-            smoothed_bigrams_probs[key][value] = (bigrams[key][value] + 1) /(key_occur + distinct_unigrams)
+            smoothed_bigrams_probs[key][value] = math.log((bigrams[key][value] + 1) /(key_occur + distinct_unigrams)) #add-one smoothing
 
 
 
@@ -69,7 +69,8 @@ def create_model(path):
 
 
 
-    return [smoothed_bigrams_probs, unigrams_count]
+    # return [smoothed_bigrams_probs, unigrams_count]
+    return {"bigrams":smoothed_bigrams_probs, "unigrams_count": unigrams_count }
 
 
 def predict(file, model_en, model_es):
@@ -80,7 +81,8 @@ def predict(file, model_en, model_es):
     # - remember to do exactly the same preprocessing you did when creating the model (that's what it is a method)
     # - you may want to use an additional method to calculate the probablity of a text given a model (and call it twice)
     f = open(file, 'r',  encoding="utf8")
-    total_prob = 0
+    en_total_prob = 0
+    es_total_prob = 0
     for l in f.readlines():
         tokens = preprocess(l)
         if len(tokens) == 0:
@@ -89,12 +91,21 @@ def predict(file, model_en, model_es):
             for i in range(1,len(token)-1): 
                 curr_char = token[i]
                 next_char = token[i+1]
-                curr_prob = model_en[0][curr_char][next_char]
-                if (curr_prob == 0):
-                    curr_prob = 1/ (model_en[1]+26)
-                # print('{} {} {}'.format(curr_char,next_char,curr_prob))
-                total_prob += math.log(curr_prob)
-    print(total_prob)
+                en_curr_prob = model_en['bigrams'][curr_char][next_char]
+                es_curr_prob = model_es['bigrams'][curr_char][next_char]
+                if (en_curr_prob == 0): # if probs is 0, use smoothing
+                    en_curr_prob = math.log(1/ (model_en['unigrams_count']+26))
+                if (es_curr_prob == 0): # if probs is 0, use smoothing
+                    es_curr_prob = math.log(1/ (model_es['unigrams_count']+26))
+                en_total_prob += en_curr_prob
+                es_total_prob += es_curr_prob
+    # print('{} en model: {} es model: {}'.format(file,en_total_prob,es_total_prob))
+
+    if (en_total_prob > es_total_prob):
+        prediction = 'English'
+    else:
+        prediction = 'Spanish'
+    
                 
         
 
