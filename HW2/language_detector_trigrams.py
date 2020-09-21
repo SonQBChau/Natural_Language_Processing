@@ -19,7 +19,7 @@ def preprocess(line):
 
     # update this when working with trigrams (need '$$')
     # you can also change the preprocessing (keep numbers, do not lower case, etc.)
-    tokens = ['$'+token+'$' for token in tokens]
+    tokens = ['$$'+token+'$$' for token in tokens]
     
     return tokens
 
@@ -29,51 +29,37 @@ def create_model(path):
     # unigrams will return 0 if the key doesn't exist
     unigrams = collections.defaultdict(int)
     # and then you have to figure out what bigrams will return
-    bigrams = collections.defaultdict(lambda: collections.defaultdict(int))
+    trigrams = collections.defaultdict(lambda: collections.defaultdict(int))
 
     f = open(path, 'r',  encoding="utf8")
     ## You shouldn't visit a token more than once
-
     for l in f.readlines():
         tokens = preprocess(l)
         if len(tokens) == 0:
             continue
-        
         for token in tokens:
             # FIXME Update the counts for unigrams and bigrams
-            for i in range(1,len(token)-1): # I can't figure out why we need $, I guess to avoid the last char error?!?
-                curr_char = token[i]
-                next_char = token[i+1]
-                unigrams[curr_char] += 1
-                bigrams[curr_char][next_char] += 1
-                # print('=====')
+            for i in range(2,len(token)-2): # I can't figure out why we need $, I guess to avoid the last char error?!?
+                char_1 = token[i]
+                char_2 = token[i+1]
+                char_3 = token[i+2]
+                unigrams[char_1] += 1
+                trigrams[(char_1,char_2)][char_3] += 1
           
-            
+           
 
     # FIXME After calculating the counts, calculate the smoothed log probabilities
     distinct_unigrams = len(unigrams) # should be 26 but who knows?
     unigrams_count = sum(unigrams.values())
-    smoothed_bigrams_probs = collections.defaultdict(lambda: collections.defaultdict(int))
+    smoothed_trigrams_probs = collections.defaultdict(lambda: collections.defaultdict(int))
 
     # smoothed log probabilities
-    for key in bigrams:
-        key_occur = (sum(bigrams[key].values()))
-        for value in bigrams[key]:
-            smoothed_bigrams_probs[key][value] = math.log((bigrams[key][value] + 1) /(key_occur + distinct_unigrams)) #add-one smoothing
+    for char_1_char_2 in trigrams:
+        key_occur = (sum(trigrams[char_1_char_2].values()))
+        for value in trigrams[char_1_char_2]:
+            smoothed_trigrams_probs[char_1_char_2][value] = math.log((trigrams[char_1_char_2][value] + 1) /(key_occur + distinct_unigrams)) #add-one smoothing
 
-
-
-
-    # return the actual model: bigram (smoothed log) probabilities and unigram counts (the latter to smooth
-    # unseen bigrams in predict(...)
-    # print('unigram count: {}'.format(unigrams_count)) 
-    # print(bigrams['a'])
-
-
-
-
-    # return [smoothed_bigrams_probs, unigrams_count]
-    return {"bigrams":smoothed_bigrams_probs, "unigrams_count": unigrams_count }
+    return {"trigrams":smoothed_trigrams_probs, "unigrams_count": unigrams_count }
 
 
 def predict(file, model_en, model_es):
@@ -91,18 +77,19 @@ def predict(file, model_en, model_es):
         if len(tokens) == 0:
             continue
         for token in tokens:
-            for i in range(1,len(token)-1): 
-                curr_char = token[i]
-                next_char = token[i+1]
-                en_curr_prob = model_en['bigrams'][curr_char][next_char]
-                es_curr_prob = model_es['bigrams'][curr_char][next_char]
+            for i in range(2,len(token)-2): 
+                char_1 = token[i]
+                char_2 = token[i+1]
+                char_3 = token[i+2]
+                en_curr_prob = model_en['trigrams'][char_1,char_2][char_3]
+                es_curr_prob = model_es['trigrams'][char_1,char_2][char_3]
                 if (en_curr_prob == 0): # if probs is 0, use smoothing
                     en_curr_prob = math.log(1/ (model_en['unigrams_count']+26))
                 if (es_curr_prob == 0): # if probs is 0, use smoothing
                     es_curr_prob = math.log(1/ (model_es['unigrams_count']+26))
                 en_total_prob += en_curr_prob
                 es_total_prob += es_curr_prob
-    # print('{} en model: {} es model: {}'.format(file,en_total_prob,es_total_prob))
+    print('{} en model: {} es model: {}'.format(file,en_total_prob,es_total_prob))
 
     if (en_total_prob > es_total_prob):
         prediction = 'English'
