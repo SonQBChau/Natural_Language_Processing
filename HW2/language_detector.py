@@ -46,7 +46,7 @@ def create_model(path):
                 next_char = token[i+1]
                 unigrams[curr_char] += 1
                 bigrams[curr_char][next_char] += 1
-                # print('=====')
+
           
             
 
@@ -61,18 +61,8 @@ def create_model(path):
         for value in bigrams[key]:
             smoothed_bigrams_probs[key][value] = math.log((bigrams[key][value] + 1) /(key_occur + distinct_unigrams)) #add-one smoothing
 
-
-
-
     # return the actual model: bigram (smoothed log) probabilities and unigram counts (the latter to smooth
     # unseen bigrams in predict(...)
-    # print('unigram count: {}'.format(unigrams_count)) 
-    # print(bigrams['a'])
-
-
-
-
-    # return [smoothed_bigrams_probs, unigrams_count]
     return {"bigrams":smoothed_bigrams_probs, "unigrams_count": unigrams_count }
 
 
@@ -102,16 +92,12 @@ def predict(file, model_en, model_es):
                     es_curr_prob = math.log(1/ (model_es['unigrams_count']+26))
                 en_total_prob += en_curr_prob
                 es_total_prob += es_curr_prob
-    # print('{} en model: {} es model: {}'.format(file,en_total_prob,es_total_prob))
 
     if (en_total_prob > es_total_prob):
         prediction = 'English'
     else:
         prediction = 'Spanish'
     
-                
-        
-
     # prediction should be either 'English' or 'Spanish'
     return prediction
 

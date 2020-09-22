@@ -51,9 +51,7 @@ def create_model(path):
            
 
     # FIXME After calculating the counts, calculate the smoothed log probabilities
-    distinct_unigrams = len(unigrams) # should be 26 but who knows?
     unigrams_count = float(sum(unigrams.values()))
-    smoothed_trigrams_probs = collections.defaultdict(lambda: collections.defaultdict(int))
 
     # raw probabilities of unigram, bigram, trigram
     unigram_raw_probs = collections.defaultdict(int)
@@ -68,7 +66,8 @@ def create_model(path):
 
     trigram_raw_probs = collections.defaultdict(lambda: collections.defaultdict(int))
     trigram_lerp_probs = collections.defaultdict(lambda: collections.defaultdict(int))
-    # lambda1+2+3 = 1, lambda is train on held out corpus
+
+    # lambda1+2+3 = 1, lambda is trained on held out corpus for maximum probability
     lambda1= 0.3
     lambda2= 0.4
     lambda3= 0.3
@@ -79,20 +78,9 @@ def create_model(path):
         for char_3 in trigrams[char_1_char_2]:
             trigram_raw_probs[char_1_char_2][char_3] = trigrams[char_1_char_2][char_3] / char_1_char_2_occur
             # simple interpolation
+            # P(wi|wi−1,wi−2) = λ3PML(wi|wi−1,wi−2) + λ2PML(wi|wi−1) + λ1PML(wi)
             trigram_lerp_probs[char_1_char_2][char_3] = lambda1 * unigram_raw_probs[char_1]  + lambda2 * bigram_raw_probs[char_1][char_2]  + lambda3 * trigram_raw_probs[char_1_char_2][char_3]
     
-    # print(unigram_raw_probs)
-    # print(bigram_raw_probs)
-    # print(trigram_raw_probs)
-
-    # smoothed log probabilities
-    # for char_1_char_2 in trigrams:
-    #     key_occur = (sum(trigrams[char_1_char_2].values()))
-    #     for char_3 in trigrams[char_1_char_2]:
-    #         # smoothed_trigrams_probs[char_1_char_2][value] = math.log((trigrams[char_1_char_2][value] + 1) /(key_occur + distinct_unigrams)) #add-one smoothing
-    #         lerp_trigrams_probs[char_1_char_2][char_3] = lambda1 * unigrams[char_1] + lambda2 * bigrams[char_1][char_2] + lambda3 * trigrams[(char_1,char_2)[char_3]] # simple interpolation
-
-    # return {"trigrams":smoothed_trigrams_probs, "unigrams_count": unigrams_count }
 
     return trigram_lerp_probs
 
@@ -120,15 +108,11 @@ def predict(file, model_en, model_es):
                 es_curr_prob = model_es[char_1,char_2][char_3]
                 en_total_prob += en_curr_prob
                 es_total_prob += es_curr_prob
-    print('{} en model: {} es model: {}'.format(file,en_total_prob,es_total_prob))
 
     if (en_total_prob > es_total_prob):
         prediction = 'English'
     else:
         prediction = 'Spanish'
-    
-                
-        
 
     # prediction should be either 'English' or 'Spanish'
     return prediction
