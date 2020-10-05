@@ -21,9 +21,16 @@ def create_model(sentences):
             if i == 0:
                 continue
             majority_tag_counts[sentence[i].word][sentence[i].tag] += 1
+            # likelihood
+            likelihood_counts[token.word][token.tag] += 1
 
     for word in majority_tag_counts:
         majority_baseline[word] = max(majority_tag_counts[word].items(), key=operator.itemgetter(1))[0]
+    
+    for word in likelihood_counts:
+        word_occur = (sum(likelihood_counts[word].values()))
+        for tag in likelihood_counts[word]:
+            likelihoods[word][tag] = likelihood_counts[word][tag] /word_occur  
 
     ############################
     
