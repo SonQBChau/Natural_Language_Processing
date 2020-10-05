@@ -26,10 +26,27 @@ def create_model(sentences):
         majority_baseline[word] = max(majority_tag_counts[word].items(), key=operator.itemgetter(1))[0]
 
     ############################
+    
     # YOUR CODE GOES HERE
     # Calculate prior and likelihood probabilities (after getting the prior and likelihood counts.
     # You can modify the data structures above to fit your needs, you choose what works best for you
     ############################
+    unigrams_tag = collections.defaultdict(int)
+    for sentence in sentences:
+        for i in range(0,len(sentence)-1):
+            curr_tok = sentence[i]
+            next_tok = sentence[i+1]
+            unigrams_tag[curr_tok.tag] += 1
+            prior_counts[curr_tok.tag][next_tok.tag] += 1
+  
+
+    # smoothed log probabilities
+    for key in prior_counts:
+        key_occur = (sum(prior_counts[key].values()))
+        for value in prior_counts[key]:
+            priors[key][value] = math.log((prior_counts[key][value] + 1) /(key_occur + len(unigrams_tag))) #add-one smoothing
+    
+  
 
     return priors, likelihoods, majority_baseline, tag_counts
 
