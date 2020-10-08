@@ -3,8 +3,8 @@ import collections
 import math
 import operator
 import random
-
 import utils
+import numpy as np 
 
 
 def create_model(sentences):
@@ -18,19 +18,21 @@ def create_model(sentences):
     for sentence in sentences:
         for i, token in enumerate(sentence):
             tag_counts[token.tag] += 1
-            if i == 0:
-                continue
+            # if i == 0:
+            #     continue
             majority_tag_counts[sentence[i].word][sentence[i].tag] += 1
+
             # likelihood
-            likelihood_counts[token.word][token.tag] += 1
+            likelihood_counts[token.tag][token.word] += 1
 
     for word in majority_tag_counts:
         majority_baseline[word] = max(majority_tag_counts[word].items(), key=operator.itemgetter(1))[0]
     
-    for word in likelihood_counts:
-        word_occur = (sum(likelihood_counts[word].values()))
-        for tag in likelihood_counts[word]:
-            likelihoods[word][tag] = likelihood_counts[word][tag] /word_occur  
+    # likelihood_counts
+    for tag in likelihood_counts:
+        tag_occur = (sum(likelihood_counts[tag].values()))
+        for word in likelihood_counts[tag]:
+            likelihoods[tag][word] = likelihood_counts[tag][word] /tag_occur  
 
     ############################
     
@@ -38,6 +40,8 @@ def create_model(sentences):
     # Calculate prior and likelihood probabilities (after getting the prior and likelihood counts.
     # You can modify the data structures above to fit your needs, you choose what works best for you
     ############################
+    
+    # prior counts
     unigrams_tag = collections.defaultdict(int)
     for sentence in sentences:
         for i in range(0,len(sentence)-1):
@@ -45,14 +49,15 @@ def create_model(sentences):
             next_tok = sentence[i+1]
             unigrams_tag[curr_tok.tag] += 1
             prior_counts[curr_tok.tag][next_tok.tag] += 1
-  
+   
 
-    # smoothed log probabilities
+    # prior probabilities
     for key in prior_counts:
         key_occur = (sum(prior_counts[key].values()))
-        for value in prior_counts[key]:
-            priors[key][value] = math.log((prior_counts[key][value] + 1) /(key_occur + len(unigrams_tag))) #add-one smoothing
-    
+        # for value in prior_counts[key]:
+        for value in unigrams_tag:
+            priors[key][value] = (prior_counts[key][value] + 1) /(key_occur + len(unigrams_tag)) #add-one smoothing
+   
   
 
     return priors, likelihoods, majority_baseline, tag_counts
@@ -77,12 +82,67 @@ def predict_tags(sentences, model, mode='always_NN'):
             # 3. Reconstruct the optimal sequence of tags
             # (The code below just assigns random tags)
             ############################
+            
+            # viterbi(sentence, priors, likelihoods)
+            tags = [tag for tag  in tag_counts]
+            words = [token.word for token  in sentence]
+            # start_probability = 
+            transition_probability = priors
+            emission_prbability = likelihoods
+            # result = viterbit(states, observation, transition_probability, emission_prbability)
+            viterbi(sentence,tags,words, priors, likelihoods)
+            
+            # optimal_tags = viterbi()
             for token in sentence:
-                token.tag = random.choice(list(tag_counts.keys()))
+                # token.tag = random.choice(list(tag_counts.keys()))
+        
+                # token.tag = optimal_tags[token.word]
+                pass
+
+                
         else:
             assert False
 
     return sentences
+
+def viterbi(sentence, tags, words, priors, likelihoods):
+    viterbi =  collections.defaultdict(lambda: collections.defaultdict(float));
+    T = len(tags) # N in the book
+    # W = len(words) # T in teh book
+    for i in range(1 , T): 
+        tag = tags[i]
+        word = sentence[1].word
+        viterbi[word][i] = likelihoods[tag][word] * priors['<s>'] [tag]
+    
+    print(viterbi)
+
+# def viterbit(states, obs, t_pro, e_pro):
+#     path = { s:[] for s in states} # init path: path[s] represents the path ends with s
+#     curr_pro = {}
+#     for s in states:
+# 		# curr_pro[s] = s_pro[s]*e_pro[s][obs[0]]
+#         curr_pro[s] = e_pro[s][obs[1]] * t_pro[obs[0]][s]
+
+       
+#     for i in range(1, len(obs)):
+#         last_pro = curr_pro
+#         curr_pro = {}
+#         for curr_state in states:
+#             max_pro, last_sta = max(((last_pro[last_state]*t_pro[last_state][curr_state]*e_pro[curr_state][obs[i]], last_state) 
+# 				                       for last_state in states))
+#             curr_pro[curr_state] = max_pro
+#             path[curr_state].append(last_sta)
+
+# 	# find the final largest probability
+#     max_pro = -1
+#     max_path = None
+#     for s in states:
+#         path[s].append(s)
+#         if curr_pro[s] > max_pro:
+#             max_path = path[s]
+#             max_pro = curr_pro[s]
+#         # print '%s: %s'%(curr_pro[s], path[s]) # different path and their probability
+#     return max_path
 
 
 if __name__ == "__main__":
