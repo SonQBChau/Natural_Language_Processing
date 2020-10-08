@@ -67,7 +67,8 @@ def predict_tags(sentences, model, mode='always_NN'):
     assert mode in ['always_NN', 'majority', 'hmm']
 
     priors, likelihoods, majority_baseline, tag_counts = model
-    for sentence in sentences:
+    # for sentence in sentences:
+    for sentence in sentences[0:100]:
         if mode == 'always_NN':
             for token in sentence:
                 token.tag = "NN"
@@ -90,14 +91,20 @@ def predict_tags(sentences, model, mode='always_NN'):
             transition_probability = priors
             emission_prbability = likelihoods
             # result = viterbit(states, observation, transition_probability, emission_prbability)
-            viterbi(sentence,tags,words, priors, likelihoods)
+            viterbi_matrix = viterbi(sentence,tags,words, priors, likelihoods)
             
             # optimal_tags = viterbi()
             for token in sentence:
                 # token.tag = random.choice(list(tag_counts.keys()))
+                max = -1
+                max_tag = 'unk'
+                for k,v  in viterbi_matrix[token.word].items():
+                    if v[0] > max:
+                        max = v[0]
+                        max_tag = k
         
-                # token.tag = optimal_tags[token.word]
-                pass
+                token.tag = max_tag
+                
 
                 
         else:
@@ -106,15 +113,32 @@ def predict_tags(sentences, model, mode='always_NN'):
     return sentences
 
 def viterbi(sentence, tags, words, priors, likelihoods):
-    viterbi =  collections.defaultdict(lambda: collections.defaultdict(float));
-    T = len(tags) # N in the book
-    # W = len(words) # T in teh book
-    for i in range(1 , T): 
-        tag = tags[i]
+    viterbi =  collections.defaultdict(lambda: collections.defaultdict(float))
+    T = len(tags) 
+    W = len(sentence) 
+ 
+    for t in range(1 , T): 
+        tag = tags[t]
         word = sentence[1].word
-        viterbi[word][i] = likelihoods[tag][word] * priors['<s>'] [tag]
+        viterbi[word][tag] = (likelihoods[tag][word] * priors[tags[0]] [tag], tag)
     
-    print(viterbi)
+    # print(viterbi)
+    for w in range (2, W):
+        word = sentence[w].word
+        prior_word = sentence[w-1].word
+        for t in range(1 , T): 
+            best_prob = -1
+            best_prev_tag = -1
+            for j in range(1 , T): 
+                tag = tags[j]
+                current_prob = viterbi[prior_word][tag][0] * likelihoods[tags[t]][word] * priors [tag][tags[t]]
+                if (current_prob > best_prob):
+                    best_prob = current_prob
+                    best_prev_tag = tag
+            viterbi[word][tags[t]] = (best_prob, best_prev_tag)
+    
+    return viterbi
+
 
 # def viterbit(states, obs, t_pro, e_pro):
 #     path = { s:[] for s in states} # init path: path[s] represents the path ends with s
