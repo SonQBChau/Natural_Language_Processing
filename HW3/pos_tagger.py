@@ -18,17 +18,18 @@ def create_model(sentences):
     for sentence in sentences:
         for i, token in enumerate(sentence):
             tag_counts[token.tag] += 1
+            # I used the first <s> so I uncommented the skip check below
             # if i == 0:
             #     continue
             majority_tag_counts[sentence[i].word][sentence[i].tag] += 1
 
-            # likelihood
+            # likelihood count
             likelihood_counts[token.tag][token.word] += 1
 
     for word in majority_tag_counts:
         majority_baseline[word] = max(majority_tag_counts[word].items(), key=operator.itemgetter(1))[0]
     
-    # likelihood_counts
+    # likelihood
     for tag in likelihood_counts:
         tag_occur = (sum(likelihood_counts[tag].values()))
         for word in likelihood_counts[tag]:
@@ -50,7 +51,6 @@ def create_model(sentences):
             unigrams_tag[curr_tok.tag] += 1
             prior_counts[curr_tok.tag][next_tok.tag] += 1
    
-
     # prior probabilities
     for key in prior_counts:
         key_occur = (sum(prior_counts[key].values()))
@@ -67,8 +67,8 @@ def predict_tags(sentences, model, mode='always_NN'):
     assert mode in ['always_NN', 'majority', 'hmm']
 
     priors, likelihoods, majority_baseline, tag_counts = model
-    # for sentence in sentences:
-    for sentence in sentences[0:100]:
+    for sentence in sentences:
+    # for sentence in sentences[0:1000]:
         if mode == 'always_NN':
             for token in sentence:
                 token.tag = "NN"
@@ -83,90 +83,79 @@ def predict_tags(sentences, model, mode='always_NN'):
             # 3. Reconstruct the optimal sequence of tags
             # (The code below just assigns random tags)
             ############################
-            
-            # viterbi(sentence, priors, likelihoods)
             tags = [tag for tag  in tag_counts]
-            words = [token.word for token  in sentence]
-            # start_probability = 
-            transition_probability = priors
-            emission_prbability = likelihoods
-            # result = viterbit(states, observation, transition_probability, emission_prbability)
-            viterbi_matrix = viterbi(sentence,tags,words, priors, likelihoods)
-            
-            # optimal_tags = viterbi()
+            # get the optimal sequence from viterbi
+            optimal_pos = viterbi(sentence,tags, priors, likelihoods)
             for token in sentence:
-                # token.tag = random.choice(list(tag_counts.keys()))
-                max = -1
-                max_tag = 'unk'
-                for k,v  in viterbi_matrix[token.word].items():
-                    if v[0] > max:
-                        max = v[0]
-                        max_tag = k
-        
-                token.tag = max_tag
-                
-
-                
+                token.tag = optimal_pos[token.word]
+                      
         else:
             assert False
 
     return sentences
 
-def viterbi(sentence, tags, words, priors, likelihoods):
+############################
+# I implemented this mostly based on what Dr.Blanco went through in class.
+# for i in 1...T: 
+#   viterbi[t,1] = P(w1|t) x P(t|<s>)
+# for w in 2...W:
+#   for t in 1...T:
+#       ......
+############################
+def viterbi(sentence, tags, priors, likelihoods):
     viterbi =  collections.defaultdict(lambda: collections.defaultdict(float))
+    optimal_pos = collections.defaultdict(str)
     T = len(tags) 
     W = len(sentence) 
- 
+    
+    best_first_prob = -1
+    best_first_tag = ''
+    # find viterbi for first column of the matrix
     for t in range(1 , T): 
         tag = tags[t]
         word = sentence[1].word
+        # calculate the probability based on likelihoods and priors
         viterbi[word][tag] = (likelihoods[tag][word] * priors[tags[0]] [tag], tag)
+
+        # this block to find the highest probability tag
+        if (viterbi[word][tag][0] > best_first_prob):
+            best_first_prob = viterbi[word][tag][0]
+            best_first_tag = tag
+    optimal_pos[word] = best_first_tag
     
-    # print(viterbi)
+    # find viterbi for the rest of the matrix
     for w in range (2, W):
         word = sentence[w].word
         prior_word = sentence[w-1].word
+        best_tag = ''
+        best_word_prob = -1
         for t in range(1 , T): 
             best_prob = -1
             best_prev_tag = -1
             for j in range(1 , T): 
                 tag = tags[j]
+                # calculate the probability based on likelihoods and priors and previous viterbi
                 current_prob = viterbi[prior_word][tag][0] * likelihoods[tags[t]][word] * priors [tag][tags[t]]
+
+                # this block to find the highest probability
                 if (current_prob > best_prob):
                     best_prob = current_prob
                     best_prev_tag = tag
             viterbi[word][tags[t]] = (best_prob, best_prev_tag)
+
+            # this block to find the highest probability tag
+            if (best_prob > best_word_prob):
+                best_word_prob = best_prob
+                best_tag = tags[t]
+
+        # reconstruct the optimal sequence of tags
+        optimal_pos[word]=best_tag
     
-    return viterbi
+    # this is for debug
+    # print(viterbi)
+    # print(optimal_pos)
 
-
-# def viterbit(states, obs, t_pro, e_pro):
-#     path = { s:[] for s in states} # init path: path[s] represents the path ends with s
-#     curr_pro = {}
-#     for s in states:
-# 		# curr_pro[s] = s_pro[s]*e_pro[s][obs[0]]
-#         curr_pro[s] = e_pro[s][obs[1]] * t_pro[obs[0]][s]
-
-       
-#     for i in range(1, len(obs)):
-#         last_pro = curr_pro
-#         curr_pro = {}
-#         for curr_state in states:
-#             max_pro, last_sta = max(((last_pro[last_state]*t_pro[last_state][curr_state]*e_pro[curr_state][obs[i]], last_state) 
-# 				                       for last_state in states))
-#             curr_pro[curr_state] = max_pro
-#             path[curr_state].append(last_sta)
-
-# 	# find the final largest probability
-#     max_pro = -1
-#     max_path = None
-#     for s in states:
-#         path[s].append(s)
-#         if curr_pro[s] > max_pro:
-#             max_path = path[s]
-#             max_pro = curr_pro[s]
-#         # print '%s: %s'%(curr_pro[s], path[s]) # different path and their probability
-#     return max_path
+    return optimal_pos
 
 
 if __name__ == "__main__":
