@@ -4,6 +4,8 @@ import re
 import math
 import logging
 import argparse
+import math
+import numpy as np 
 
 
 def read_data(file_name):
@@ -23,7 +25,12 @@ def dot_product(array1, array2):
     #####################
     # YOUR CODE GOES HERE
     #####################
-    return -1
+    print(array1)
+    print(array2)
+    print(np.dot(array1, array2))
+    result = sum([i*j for (i, j) in zip(array1, array2)])
+    print(result)
+    return result
 
 
 def sigmoid(x):
@@ -31,13 +38,17 @@ def sigmoid(x):
     #####################
     # YOUR CODE GOES HERE
     #####################
-    return -1
+    result = 1/(1+math.exp( -x ))
+    return result
 
 
 def predict(weights, instance):
     #####################
     # YOUR CODE GOES HERE
     #####################
+    output = sigmoid(dot_product(weights, instance))
+    if output > 0.5:
+        return 1
     return 0
 
 
