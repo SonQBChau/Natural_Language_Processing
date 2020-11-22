@@ -25,11 +25,7 @@ def dot_product(array1, array2):
     #####################
     # YOUR CODE GOES HERE
     #####################
-    print(array1)
-    print(array2)
-    print(np.dot(array1, array2))
     result = sum([i*j for (i, j) in zip(array1, array2)])
-    print(result)
     return result
 
 
@@ -38,7 +34,7 @@ def sigmoid(x):
     #####################
     # YOUR CODE GOES HERE
     #####################
-    result = 1/(1+math.exp( -x ))
+    result = 1/(1+math.exp(-x))
     return result
 
 
@@ -51,16 +47,67 @@ def predict(weights, instance):
         return 1
     return 0
 
+def derivative_sigmoid(x):
+    return sigmoid(x)*(1-sigmoid(x))
 
 def train_perceptron(instances, lr, epochs):
     # Train (calculates weights) for a sigmoid perceptron
     weights = [0] * (len(instances[0])-1)
-
+ 
     #####################
     # YOUR CODE GOES HERE
     #####################
+
+    for epoch in range(epochs):
+        for ins in instances: 
+            output = sigmoid(dot_product(weights, ins))
+            error = ins[-1] - output 
+            for i in range(len(weights)):
+                # update weight according to the weight update rule
+                derivative_output = derivative_sigmoid(output)
+                weighted_derv = error * derivative_output
+                weights[i] = weights[i] + lr * weighted_derv * ins[i]
+
     return weights
 
+'''
+# Sigmoid function :
+def sigmoid_2(x):
+    return 1/(1+np.exp(-x))# Derivative of sigmoid function :
+def sigmoid_der_2(x):
+    return sigmoid_2(x)*(1-sigmoid_2(x))
+# Main logic for neural network :
+# Running our code 10000 times :
+def train_perceptron_2(instances, lr, epochs):
+    weights = [0] * (len(instances[0])-1)
+    input_features = np.array(instances)
+    target_input = input_features[:, :-1]
+    target_output = input_features[:, -1]
+    for epoch in range(epochs):
+        inputs = target_input
+        #Feedforward input :
+        pred_in = np.dot(inputs, weights)
+    
+        #Feedforward output :
+        pred_out = sigmoid_2(pred_in)
+    
+        #Backpropogation 
+        #Calculating error
+        error = pred_out - target_output
+
+        #Calculating derivative :
+        dcost_dpred = error
+        dpred_dz = sigmoid_der_2(pred_out)
+
+        #Multiplying individual derivatives :
+        z_delta = dcost_dpred * dpred_dz
+        #Multiplying with the 3rd individual derivative :
+        inputs = target_input.T
+        weights -= lr * np.dot(inputs, z_delta)
+
+        # print(weights)
+    return weights
+'''
 
 def get_accuracy(weights, instances):
     ###########################
@@ -71,7 +118,8 @@ def get_accuracy(weights, instances):
     for instance in instances:
         prediction = predict(weights, instance)
         error += abs(instance[-1] - prediction)
-   
+    
+    
     accuracy = float(len(instances)-error) / len(instances)
     return accuracy * 100
 
