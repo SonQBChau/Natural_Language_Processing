@@ -70,45 +70,6 @@ def train_perceptron(instances, lr, epochs):
 
     return weights
 
-'''
-# Sigmoid function :
-def sigmoid_2(x):
-    return 1/(1+np.exp(-x))# Derivative of sigmoid function :
-def sigmoid_der_2(x):
-    return sigmoid_2(x)*(1-sigmoid_2(x))
-# Main logic for neural network :
-# Running our code 10000 times :
-def train_perceptron_2(instances, lr, epochs):
-    weights = [0] * (len(instances[0])-1)
-    input_features = np.array(instances)
-    target_input = input_features[:, :-1]
-    target_output = input_features[:, -1]
-    for epoch in range(epochs):
-        inputs = target_input
-        #Feedforward input :
-        pred_in = np.dot(inputs, weights)
-    
-        #Feedforward output :
-        pred_out = sigmoid_2(pred_in)
-    
-        #Backpropogation 
-        #Calculating error
-        error = pred_out - target_output
-
-        #Calculating derivative :
-        dcost_dpred = error
-        dpred_dz = sigmoid_der_2(pred_out)
-
-        #Multiplying individual derivatives :
-        z_delta = dcost_dpred * dpred_dz
-        #Multiplying with the 3rd individual derivative :
-        inputs = target_input.T
-        weights -= lr * np.dot(inputs, z_delta)
-
-        # print(weights)
-    return weights
-'''
-
 def get_accuracy(weights, instances):
     ###########################
     # DO NOT CHANGE THIS METHOD
