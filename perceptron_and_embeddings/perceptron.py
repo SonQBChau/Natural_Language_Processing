@@ -22,26 +22,20 @@ def read_data(file_name):
 
 def dot_product(array1, array2):
     # Returns the dot product between array1 and array2
-    #####################
-    # YOUR CODE GOES HERE
-    #####################
+
     result = sum([i*j for (i, j) in zip(array1, array2)])
     return result
 
 
 def sigmoid(x):
     # Returns sigmoid of x
-    #####################
-    # YOUR CODE GOES HERE
-    #####################
+ 
     result = 1/(1+math.exp(-x))
     return result
 
 
 def predict(weights, instance):
-    #####################
-    # YOUR CODE GOES HERE
-    #####################
+
     output = sigmoid(dot_product(weights, instance))
     if output > 0.5:
         return 1
@@ -54,9 +48,7 @@ def train_perceptron(instances, lr, epochs):
     # Train (calculates weights) for a sigmoid perceptron
     weights = [0] * (len(instances[0])-1)
  
-    #####################
-    # YOUR CODE GOES HERE
-    #####################
+
 
     for epoch in range(epochs):
         for ins in instances: 

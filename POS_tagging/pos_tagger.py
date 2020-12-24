@@ -36,8 +36,6 @@ def create_model(sentences):
             likelihoods[tag][word] = likelihood_counts[tag][word] /tag_occur  
 
     ############################
-    
-    # YOUR CODE GOES HERE
     # Calculate prior and likelihood probabilities (after getting the prior and likelihood counts.
     # You can modify the data structures above to fit your needs, you choose what works best for you
     ############################
@@ -77,7 +75,6 @@ def predict_tags(sentences, model, mode='always_NN'):
                 token.tag = majority_baseline[token.word]
         elif mode == 'hmm':
             ############################
-            # YOUR CODE GOES HERE
             # 1. Create the Viterbi Matrix (one per sentence)
             # 2. Fill the Viterbi Matrix
             # 3. Reconstruct the optimal sequence of tags
@@ -95,7 +92,6 @@ def predict_tags(sentences, model, mode='always_NN'):
     return sentences
 
 ############################
-# I implemented this mostly based on what Dr.Blanco went through in class.
 # for i in 1...T: 
 #   viterbi[t,1] = P(w1|t) x P(t|<s>)
 # for w in 2...W:
