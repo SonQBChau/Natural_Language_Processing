@@ -1,6 +1,16 @@
 import argparse
 import re
 
+####################################################################################################
+# Transform a verb into present tense in third person
+
+# 1. If the verb ends in ss, x, ch, sh or o, we add es at the end. For example, kiss: kisses,
+# fix: fixes, watch: watches, crash: crashes, go: goes.
+
+# 2. If the verb ends in a consonant and y, we remove the y and add ies. For example,
+# carry: carries, hurry: hurries, study: studies, deny: denies.
+###################################################################################################
+
 def read_verbs(file_path):
     with open(file_path) as f:
         for verb in f.readlines():
@@ -11,8 +21,6 @@ def read_verbs(file_path):
 
 
 def get_3rdperson(verb):
-    # YOUR CODE GOES HERE
-    # Use the re module to do string matching. A good solution is as short as 5 lines
 
     pattern_1 = "(.+((ss)|(ch)|(sh)|[xo])$)"
     pattern_2 = "(.*[b-df-hj-np-tv-z]y$)"
