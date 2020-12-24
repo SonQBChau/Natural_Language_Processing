@@ -6,8 +6,6 @@ import math
 
 
 def preprocess(line):
-    # DO NOT CHANGE THIS METHOD unless you are done with bigrams and you are trying to get extra credit
-
     # get rid of the stuff at the end of the line (spaces, tabs, new line, etc.)
     line = line.rstrip()
     # lower case
@@ -40,8 +38,8 @@ def create_model(path):
             continue
         
         for token in tokens:
-            # FIXME Update the counts for unigrams and bigrams
-            for i in range(1,len(token)-1): # I can't figure out why we need $, I guess to avoid the last char error?!?
+            #  Update the counts for unigrams and bigrams
+            for i in range(1,len(token)-1): 
                 curr_char = token[i]
                 next_char = token[i+1]
                 unigrams[curr_char] += 1
@@ -50,7 +48,7 @@ def create_model(path):
           
             
 
-    # FIXME After calculating the counts, calculate the smoothed log probabilities
+    #  After calculating the counts, calculate the smoothed log probabilities
     distinct_unigrams = len(unigrams) # should be 26 but who knows?
     unigrams_count = sum(unigrams.values())
     smoothed_bigrams_probs = collections.defaultdict(lambda: collections.defaultdict(int))
@@ -69,10 +67,8 @@ def create_model(path):
 def predict(file, model_en, model_es):
     prediction = None
 
-    # FIXME Use the model to make predictions.
-    # FIXME: Predict whichever language gives you the highest (smoothed log) probability
-    # - remember to do exactly the same preprocessing you did when creating the model (that's what it is a method)
-    # - you may want to use an additional method to calculate the probablity of a text given a model (and call it twice)
+    #  Use the model to make predictions.
+    #  Predict whichever language gives you the highest (smoothed log) probability
     f = open(file, 'r',  encoding="utf8")
     en_total_prob = 0
     es_total_prob = 0
